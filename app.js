@@ -47,7 +47,7 @@
     var m = String((err && err.message) || '').toLowerCase();
     var s = err && err.status;
     if (s === 429 || m.indexOf('rate limit') > -1 || m.indexOf('for security purposes') > -1) {
-      return 'Zu viele Codes in kurzer Zeit. Der eingebaute Mailversand erlaubt nur wenige pro Stunde. Warte etwas oder nimm den zuletzt geschickten Code.';
+      return 'Zu viele Codes in kurzer Zeit (höchstens einer pro Minute). Der letzte Code ist wahrscheinlich schon unterwegs und gilt eine Stunde: Schau im Postfach und im Spam-Ordner nach und tippe auf „Ich habe schon einen Code".';
     }
     if (m.indexOf('not authorized') > -1 || m.indexOf('not allowed') > -1 && m.indexOf('signup') < 0) {
       return 'An diese Adresse darf der eingebaute Mailversand nichts schicken. Nimm die Adresse Deines Supabase-Kontos.';
@@ -86,6 +86,14 @@
       setMsg('');
       zeigeCodeSchritt(true);
     }, function (err) { busy(btn, false); setMsg(erklaere(err), true); });
+  });
+
+  // Der Code ist schon unterwegs (zum Beispiel nach der Meldung "zu viele Codes"): direkt zur Eingabe.
+  $('b-have-code').addEventListener('click', function () {
+    var mail = $('mail').value.trim().toLowerCase();
+    if (!validMail(mail)) { setMsg('Bitte zuerst Deine E-Mail-Adresse eingeben.', true); return; }
+    try { localStorage.setItem(KEEP_KEY, $('keep').checked ? '1' : '0'); } catch (er) {}
+    pendingMail = mail; setMsg(''); zeigeCodeSchritt(true);
   });
 
   fCode.addEventListener('submit', function (e) {
