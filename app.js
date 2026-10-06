@@ -814,6 +814,13 @@
   });
 
   /* ----- Foto ----- */
+  // Foto bildschirmfüllend: Tipp auf das Foto öffnet es, Tipp irgendwo oder auf X schließt es. Zwei Finger vergrößern.
+  function zeigeGross(src) { $('lightbox-img').src = src; $('lightbox').hidden = false; }
+  function schliesseGross() { $('lightbox').hidden = true; $('lightbox-img').removeAttribute('src'); }
+  $('d-photo').addEventListener('click', function (e) { if (e.target.tagName === 'IMG') { zeigeGross(e.target.src); } });
+  $('f-img').addEventListener('click', function () { zeigeGross(this.src); });
+  $('lightbox').addEventListener('click', schliesseGross);
+  document.addEventListener('keydown', function (e) { if (e.key === 'Escape' && !$('lightbox').hidden) { e.stopPropagation(); schliesseGross(); } }, true);
   var fotoInput = $('foto-input'), fotoBlob = null, fotoVorschau = null;
   function verkleinere(file) {
     // Auf höchstens 2000 Pixel Kantenlänge verkleinern (JPEG): spart Platz und Datenvolumen.
