@@ -213,10 +213,21 @@
     r.onresult = function (e) {
       if (r !== rec) { return; }
       restarts = 0;
+      // Android liefert beim Sprechen immer wieder die LÄNGERE Fassung desselben Satzes als eigenes Ergebnis
+      // ("ja", "ja ich", "ja ich muss" ...). Deshalb: bei vorläufigen Ergebnissen nur das letzte nehmen, und
+      // ein endgültiges, das nur die verlängerte Fassung des vorigen ist, ersetzt dieses statt es anzuhängen.
       var fin = '', zw = '';
       for (var i = 0; i < e.results.length; i++) {
-        if (e.results[i].isFinal) { fin += e.results[i][0].transcript + ' '; } else { zw += e.results[i][0].transcript; }
+        var t = String(e.results[i][0].transcript || '').trim();
+        if (!t) { continue; }
+        if (e.results[i].isFinal) {
+          if (fin && t.toLowerCase().indexOf(fin.toLowerCase()) === 0) { fin = t; }          // verlängerte Fassung
+          else if (fin && fin.toLowerCase().indexOf(t.toLowerCase()) === 0) { /* kürzere Wiederholung: ignorieren */ }
+          else { fin = (fin ? fin + ' ' : '') + t; }
+        } else { zw = t; }
       }
+      // Ist das vorläufige Ergebnis nur die Fortsetzung des endgültigen Textes, nicht doppelt anzeigen.
+      if (zw && fin && zw.toLowerCase().indexOf(fin.toLowerCase()) === 0) { fin = ''; }
       sessionFinal = fin; interim = zw;
       zeigeLive();
     };
