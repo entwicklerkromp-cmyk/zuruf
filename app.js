@@ -838,7 +838,8 @@
     fotoBlob = null;
     if (fotoVorschau) { URL.revokeObjectURL(fotoVorschau); }
     fotoVorschau = URL.createObjectURL(datei);
-    $('f-img').src = fotoVorschau; $('f-img').hidden = false; $('f-ph').hidden = true;
+    $('f-img').src = fotoVorschau; $('f-img').hidden = false;
+    $('f-ph').setAttribute('hidden', '');   // SVG-Elemente kennen die Eigenschaft .hidden nicht: das Attribut setzen
     $('f-badge').textContent = 'Foto wird vorbereitet …';
     $('titel2').value = 'Beleg, ' + datumDeutsch(heute());
     setzeArt($('f-tiles'), 'beleg'); $('faellig2').value = ''; setFehler('f-err', '');

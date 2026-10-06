@@ -236,11 +236,10 @@ body.leer-heute:not(.preview) .st-empty,body.leer-alle:not(.preview) .st-live{di
 .entry.klick{cursor:pointer}
 .thumb img,.photo img{display:block;width:100%;height:100%;object-fit:cover}
 .photo img[hidden],.photo svg.ph[hidden]{display:none}
-/* Ganzes Foto zeigen (nichts abschneiden), ein Tipp öffnet es bildschirmfüllend */
-#d-photo{height:auto;background:var(--card);border:1px solid var(--line)}
-#d-photo img{height:auto;max-height:62vh;object-fit:contain;cursor:zoom-in}
-#sh-suggestfoto .photo{height:auto;min-height:168px;background:var(--card);border:1px solid var(--line)}
-#sh-suggestfoto .photo img{height:auto;max-height:55vh;object-fit:contain;cursor:zoom-in}
+/* Foto in fester Höhe (Ausschnitt, so groß wie möglich). Ein Tipp öffnet es ganz und bildschirmfüllend. */
+#d-photo,#sh-suggestfoto .photo{height:200px}
+#d-photo img,#sh-suggestfoto .photo img{height:100%;object-fit:cover;cursor:zoom-in}
+#d-photo::after,#sh-suggestfoto .photo::after{content:"Tippen zum Vergrößern";position:absolute;top:10px;right:10px;background:rgba(11,28,30,.78);color:#F4F2EE;font-size:12px;font-weight:500;line-height:1.5;padding:2px 10px;border-radius:999px;pointer-events:none}
 .lightbox{position:fixed;inset:0;z-index:90;background:rgba(11,28,30,.96);display:flex;align-items:center;justify-content:center;touch-action:pinch-zoom}
 .lightbox[hidden]{display:none}
 .lightbox img{max-width:100%;max-height:100%;object-fit:contain}
@@ -899,8 +898,8 @@ body[data-state="error"] #s-home .group,body[data-state="empty"] #s-home .group{
   </div>
 </nav>
 
-<script src="vendor/supabase.js?v=20261006092425"></script>
-<script src="config.js?v=20261006092425"></script>
+<script src="vendor/supabase.js?v=20261006093349"></script>
+<script src="config.js?v=20261006093349"></script>
 <script>
 /* Umschalter zwischen den Ansichten. Mit ?vorschau in der Adresse zeigt er Beispieldaten und die Vorschau-Leiste. */
 (function(){
@@ -959,6 +958,6 @@ body[data-state="error"] #s-home .group,body[data-state="empty"] #s-home .group{
   }
 })();
 </script>
-<script src="app.js?v=20261006092425"></script>
+<script src="app.js?v=20261006093349"></script>
 </body>
 </html>
